@@ -137,4 +137,7 @@
 	  attachBaseContext(context);  //给mBase赋值
 	}
 ```  
-	* 其中的关键方法
+  * 其中的关键方法：
+  	* *newApplication()*
+  	* *application.attachBaseContext()*
+  	* *application.onCreate()*
