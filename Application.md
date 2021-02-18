@@ -38,26 +38,105 @@
 
 * 它的类继承关系以及生命周期
 ```
-class Application extend Context implement XXX{
-    /* package */ 
-    final void attach(Context context) {
-        attachBaseContext(context);
-        mLoadedApk = ContextImpl.getImpl(context).mPackageInfo;
-    }
-}
+	class Application extend Context implement XXX{
+	    final void attach(Context context) {
+		attachBaseContext(context);
+		mLoadedApk = ContextImpl.getImpl(context).mPackageInfo;
+	    }
+	}
 
-public class Context Wrapper extends Context{
-  Context mBase;
-  public ContextWrapper(Context base){
-      mBase = base;
-  }
-  protected void attachBaseContext(Context base){
-      if (mBase != null) {
-        throw new IllegalStateException("Base context already set");
-      }
-      mBase = base;
-    }
-  }
+	public class Context Wrapper extends Context{
+	  Context mBase;
+	  public ContextWrapper(Context base){
+	      mBase = base;
+	  }
+	  protected void attachBaseContext(Context base){
+	      if (mBase != null) {
+		throw new IllegalStateException("Base context already set");
+	      }
+	      mBase = base;
+	    }
+	  }
 ```
+* 它的初始化原理
+```
+	public static void main(String[] args){
+	  Looper.prepareMainLooper();
+	  ActivityThread thread = new ActivityThread;
+	  //主要用于应用端向AMS打报告
+	  thread.attach(false);
+	  Looper.loop();
+	  throw new RuntimeExceptiom("Main thread loop unexpectedly exited");
+	}
 
-* 它的初始化`原理`
+	private void attach(){
+	  //获取ActivityManager的的Binder对象
+	  final IActivityManager mgr = ActivityManagerNative.getDefault();
+	  try{
+	    //
+	    mgr.attachApplication(mAppThread);
+	  }catch(RemoteException ex){
+	    //Ignore
+	  }
+	}
+
+	//跑在AMS端:
+	public final void attachApplication(IApplicationThread thread){
+	  synchronized(this){
+	    attachApplicationLocked(thread, callingPid);
+	  }
+	
+	//跑在AMS端:
+	boolean attachApplicationLocked(IApplicationThread thread, ...){
+	  ......
+	  thread.bindApplication(...);
+	  ......
+	}
+	
+	//应用端：(binder线程）
+	public final void bindApplication(...){
+	  AppBindData data = new AppBindData();
+	  ......
+	  sendMessage(H.BIND_APPLICATION, data);
+	}
+	
+	//应用端在主线程处理bindApplication的函数：
+	private void handleBindApplication(AppBindData data){
+	  //获取描述应用安装包的信息
+	  data.info = getPackageInfoNoCheck(data.appInfo, data.compatInfo);
+	  //创建Application对象
+	  Application app = data.info.makeApplication(...);
+	  //调用app.onCreate
+	  mInstrumentation.callApplicationOnCreate(app);
+	}
+
+	public Application makeApplication(...){
+	  if(mApplication != null){
+	    return mApplication;
+	  }
+	  ContextImpl appContext = ContextImpl.createAppContext(...);
+	  app = mActivityThread.mInstrumentation.newApplication(...);
+	  return app;
+	}
+
+	Application newApplicatoin(ClassLoader cl, String className, Context context){
+	  //加载一个类
+	  return newApplication(cl.loadClass(className), context);
+	}
+
+	Static Application newApplication(Class<?> clazz, Context context){
+	  //然后调用这个类的构造函数对创建一个Application对象
+	  Application app = (Application)clazz.newInstance();
+	  //最后把context附给app
+	  app.attach(context);
+	  return app;
+	}
+
+	//虽然Application是一个Context但它只是一个空壳，真正干活的是一个名为mBase Context成员
+	final void attach(Context context){
+	  attachBaseContext(context);  //给mBase赋值
+	}
+```  
+	
+
+	  app.attach(context);
