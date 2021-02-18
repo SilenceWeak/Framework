@@ -6,7 +6,7 @@
 
 **会问到的题目：**
 * Application的作用是什么  
- * 初始化资源，App在启动时会在Application的oncreate方法中初始化一些全局资源，系统配置和三方SDK等
+	* 初始化资源，App在启动时会在Application的oncreate方法中初始化一些全局资源，系统配置和三方SDK等
 
 * 它的类继承关系以及生命周期
 
