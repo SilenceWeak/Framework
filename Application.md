@@ -7,6 +7,12 @@
 	同时，在该方法中还有很多不同组件的启动流程，在此处添加耗时操作的话，还将导致各种组件的启动流程受阻
 	
 	- [ ] 解释二： bindApplication后处理pending的组件，包括Activity、Service、Broadcast等，本来在启动这些组件的时候它的应用是没用启动的，现在应用进程启动好了，而且Application也初始化好了，就可以去处理这些待启动的组件了，这些组件的启动操作最终是要在应用进程执行的，比如Activity的生命周期是要在应用的UI线程中调用的。如果Application耗时太久，那么将会耽误应用的组件启动。
+- [ ] 存在的一个问题：  
+	1.Application使用静态变量时产生的一个bug
+	![image](https://img-blog.csdnimg.cn/20200223144740870.png?x-oss-process=image/watermark,type_ZmFuZ3poZW5naGVpdGk,shadow_10,text_aHR0cHM6Ly9ibG9nLmNzZG4ubmV0L21lbmdoYW9jaGVuZw==,size_16,color_FFFFFF,t_70)
+	* Application中有一个静态变量name，MainActivity会去设置这个name，设置完之后马上跳转到TestActivity，Test读出name，正常情况是没什么问题的。但是如果这里把应用切到后台， 过了一段时间系统因为内存不足把应用杀掉了，再把应用切回来时，系统会重建这个应用，包括重建Application、恢复TestActivity，但这时候Application中的name是没有初始化的，TestActivity拿到的name就是null，这样就可能发生异常。
+
+
 
 **会问到的题目：**
 * Application的作用是什么  
