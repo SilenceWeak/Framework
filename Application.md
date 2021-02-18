@@ -20,9 +20,9 @@
 	     }
 	     mBase = base;
 	 }
- ```
-	也就是在调用attachBaseContext方法之前，Application中的很多方法都不能用，例如getPackageName()，不然会报空指针。  
-	Application构造方法 -> attachBaseContext() -> onCreate()，如果想把初始化时机提前到极致，可以如下操作：  
+```
+  也就是在调用attachBaseContext方法之前，Application中的很多方法都不能用，例如getPackageName()，不然会报空指针。  
+  Application构造方法 -> attachBaseContext() -> onCreate()，如果想把初始化时机提前到极致，可以如下操作：
 ```
 	public class MyApplication extends Application {  
 
