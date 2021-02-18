@@ -137,6 +137,4 @@
 	  attachBaseContext(context);  //给mBase赋值
 	}
 ```  
-	
-
-	  app.attach(context);
+	* 其中的关键方法
