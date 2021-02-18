@@ -14,6 +14,7 @@
 	* onCreate():在应用启动时调用，可以在里面初始化系统资源和一些三方SDK
 	* attachBaseContext(Context base)：该方法传入一个base参数，系统调用该方法，把ContextImpl对象传到该方法中，之后ContextWrapper中所有的方法都委托给该ComtextImpl对象去实现。
 ```
+	//在调用attachBaseContext方法之前，Application中的很多方法都不能用，例如getPackageName()，不然会报空指针。  
 	protected void attachBaseContext(Context base) {
 	     if (mBase != null) {
 		 throw new IllegalStateException("Base context already set");
@@ -21,9 +22,8 @@
 	     mBase = base;
 	 }
 ```
-  也就是在调用attachBaseContext方法之前，Application中的很多方法都不能用，例如getPackageName()，不然会报空指针。  
-  Application构造方法 -> attachBaseContext() -> onCreate()，如果想把初始化时机提前到极致，可以如下操作：
 ```
+  //Application构造方法 -> attachBaseContext() -> onCreate()，如果想把初始化时机提前到极致，可以如下操作：
 	public class MyApplication extends Application {  
 
 	    @Override  
