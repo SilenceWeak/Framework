@@ -3,6 +3,8 @@
 - [ ] 为何不能在Application的构造函数中使用getResource等函数： 因为这个时候Context上下文还没有准备好，Application在构造函数中通过Attach函数实现Context的赋值等操作
 - [ ] 不能在其中执行耗时操作，由于此构造方法中调用了创建Application，丢到UI线程中去操作，如果此时添加了耗时操作，那么势必导致UI线程阻塞。
 	同时，在该方法中还有很多不同组件的启动流程，在此处添加耗时操作的话，还将导致各种组件的启动流程受阻
+	
+	- [ ] 解释二： bindApplication后处理pending的组件，包括Activity、Service、Broadcast等，本来在启动这些组件的时候它的应用是没用启动的，现在应用进程启动好了，而且Application也初始化好了，就可以去处理这些待启动的组件了，这些组件的启动操作最终是要在应用进程执行的，比如Activity的生命周期是要在应用的UI线程中调用的。如果Application耗时太久，那么将会耽误应用的组件启动。
 
 **会问到的题目：**
 * Application的作用是什么  
@@ -58,6 +60,7 @@
 	    }
 	  }
 ```
+
 * 它的初始化原理
 ```
 	public static void main(String[] args){
@@ -134,7 +137,7 @@
 
 	//虽然Application是一个Context但它只是一个空壳，真正干活的是一个名为mBase Context成员
 	final void attach(Context context){
-	  attachBaseContext(context);  //给mBase赋值
+	  attachBaseContext(context);  //给mBase赋值 必须在attachBaseContext后才能使用context中的东西
 	}
 ```  
   * 其中的关键方法：
