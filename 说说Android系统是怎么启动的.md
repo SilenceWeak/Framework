@@ -81,10 +81,10 @@
     applicationInit(argv,...);
   }
   
-  //在nativeZygoteInit中主要用来启动Binder机制
-  onZygoteInit(){
+  //在nativeZygoteInit中主要用来启动Binder机制, 并启动一个SystemServer线程
+  //因为后面SystemServer需要和SystemManage等进程进行通信等工作
   
-  }
+  
   ```
 
 * 系统服务是怎么启动的
