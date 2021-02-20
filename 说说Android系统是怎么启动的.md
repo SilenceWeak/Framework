@@ -71,20 +71,21 @@
     return true;
   }
   
+  //处理SystemServer进程
   handleSystemServerProcess(parsedArgs){
     RuntimeInit.zygoteInit(...);
   }
   
   zygoteInit(...){
     commonInit();
-    nativeZygoteInit();
+    nativeZygoteInit();  //在nativeZygoteInit中主要用来启动Binder机制, 并启动一个SystemServer线程, 因为后面SystemServer需要和SystemManage等进程进行通信等工作.
     applicationInit(argv,...);
   }
   
-  //在nativeZygoteInit中主要用来启动Binder机制, 并启动一个SystemServer线程
-  //因为后面SystemServer需要和SystemManage等进程进行通信等工作
-  
-  
+  applicationInit(){
+    invokeStaticMain(...); //调用Java类（SystemServer）的入口函数
+  }
   ```
+  * 在SystemServer
 
 * 系统服务是怎么启动的
