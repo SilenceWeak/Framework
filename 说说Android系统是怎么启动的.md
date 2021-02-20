@@ -121,4 +121,6 @@
   * 分阶段启动：*每到一个阶段通知对应的系统服务*
 
 ## 桌面的启动
+* **AMS服务启动就绪后，会调用systemReady方法，在该方法中启动桌面（startHomeActivityLocked(...)）**
+* startHomeActivityLocked() -> LoaderTask() -> mPm.queryIntentActivitiesAsUser()【查询系统安装了的应用以及其图标将其展示, 点击之后调用被点击应用的Launch方法】
 
