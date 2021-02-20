@@ -86,6 +86,39 @@
     invokeStaticMain(...); //调用Java类（SystemServer）的入口函数
   }
   ```
-  * 在SystemServer
+  * 在SystemServer的main方法中 new SystemServer().run()
+  ```
+  run(){
+    Looper.prepareMainLooper(); 
+    System.loadLibrary("android_servers");
+    CreateSystemContext();
+    
+    startBootstrapServices();
+    startCoreServices();
+    startOtherServices();
+    
+    Looper.loop();
+  }
+  ```
+* **系统服务是怎么启动的**
+  * 系统服务怎么发布，让应用程序可见
+    ```
+    publishBinderService(...){
+      ServiceManager.addService(...)； //通过ServiceManager来注册发布一个SystemService
+    }
+    ```
+  * 系统服务跑在什么线程
+    主线程：很少服务跑在主线程
+    工作线程：DisplayThread, FgThread, IoThread, UiThread(非主线程，可以跑在子线程)
+    Binder线程：应用跨进程调过来的时候首先都在binder线程，如果之后再切换线程才有可能不在Binder线程
+    
+  * **系统服务跑在binder线程和私有工作线程的取舍**
+    
 
-* 系统服务是怎么启动的
+* **怎么解决系统服务之间的互相依赖**
+  * 分批启动
+    * 例如先启动AMS，PMS，PKMS等被大多数SystemServer依赖的系统服务
+  * 分阶段启动：*每到一个阶段通知对应的系统服务*
+
+## 桌面的启动
+
