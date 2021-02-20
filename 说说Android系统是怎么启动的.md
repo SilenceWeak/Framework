@@ -12,7 +12,7 @@
   
   * init.rc
   ```
-    // 导入其它的一些脚本
+  // 导入其它的一些脚本
   import /init.environ.rc
   import /init.usb.rc
   // 当前硬件版本的脚本
@@ -32,3 +32,59 @@
   service media /system/bin/mediaserver
   service installd /system/bin/installd
   ```
+* Zygote是怎么启动的
+  * init进程fork出zygote进程
+  * 启动虚拟机，注册jni函数：为了接下来切换到Java作准备
+  * 预加载系统资源：系统主题和一些常用的类
+  * 启动SystemServer
+  * 进入socket loop：进入Socket Loop中不断接收处理消息
+
+* Zygote的工作流程
+  * 在Socket Loop中接收到需要处理的消息时调用RunOnce（）函数
+  ```
+  runonce(){
+    args = readargumentList();
+    int pid  = Zygote.forAndSpecialize(...);
+    if(pid == 0){
+      handleChildProc(ParsedArgs,...);
+      return true;
+    }else{
+      return handleParentProc(pid,...);
+    }
+  }
+  ```
+
+* SystemServer是怎么启动的
+  ```
+  startSystemServer(...){
+    args[] = {
+      ...
+      "com.android.server.SystemServer",
+    };
+    
+    int pid = Zygote.forkSystemServer(...);
+    
+    if(pid == 0){
+      handleSystemServerProcess(parsedArgs);
+    }
+    
+    return true;
+  }
+  
+  handleSystemServerProcess(parsedArgs){
+    RuntimeInit.zygoteInit(...);
+  }
+  
+  zygoteInit(...){
+    commonInit();
+    nativeZygoteInit();
+    applicationInit(argv,...);
+  }
+  
+  //在nativeZygoteInit中主要用来启动Binder机制
+  onZygoteInit(){
+  
+  }
+  ```
+
+* 系统服务是怎么启动的
