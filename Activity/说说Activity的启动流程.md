@@ -21,7 +21,7 @@
 
   private final void startProcessLocked(ProcessRecord app,) {
     if (entryPoint == null) entryPoint = " android.app.ActivityThread"; //获取入口函数的类
-    Process.ProcessStartResult startResult = Process.start(entryPoint, );
+    Process.ProcessStartResult startResult = Process.start(entryPoint, );　//
 
     synchronized (mPidsSelfLocked) {
       mPidsSelfLocked.put(startResult.pid, app);
