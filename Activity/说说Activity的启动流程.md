@@ -60,10 +60,15 @@
     ActivityThread thread = new ActivityThread();
     thread.attach(false); //向AMS报告，在startProcessLocked中有实现，如果10s内不向AMS报告就会被清理
     Looper.loop();
+    
     throw new RuntimeException("Main thread loop unexpectedly exited");
   }
+  
   private void attach (boolean system) {
     IActivityManager mgr = ActivityManagerNative.getDefault(); //拿到AMS的binder对象
     mgr.attachApplication(mAppThread); // mAppThread:应用端的binder对象，类型是ApplicationThread
   }
   ```
+* 创建Activity的流程
+![image](https://github.com/SilenceWeak/Framework/blob/main/Pic/ProcessOfCreateActivity.jpg)
+
