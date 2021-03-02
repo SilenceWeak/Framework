@@ -102,10 +102,33 @@ public final void scheduleLaunchActivity (Intent intent, IBinder token, ) {
 }
 
 //主线程处理逻辑
-final ActivityClientRecord r = (ActivityClientRecord) msg.obj; 
-r.packagelnfo = getPackagelnfoNoCheck...);
+final ActivityClientRecord r = (ActivityClientRecord) msg.obj;
+//生成一个LoadedApk类对象，其中存储着APK的各类信息，之后启动Activity的时候，需要用到classloader来加载Activity类
+r.packagelnfo = getPackagelnfoNoCheck...); 
 handleLaunchActivity(r, null);
-```
 
+private void handleLaunchActivity (ActivityClientRecord r...){
+  Activity a = performLaunchActivity(r, customIntent);
+  if(a!= null) l
+  handleResumeActivity(r.token, fale,..);
+}
+
+private Activity performLaunchActivity (ActivityClientRecord r, ...) {
+  Activity activity = mInstrumentation.newAcivity(...); //创建一个新Activity
+  Application app = r.packagelnfo.makeApplication(false, mInstrumentation); //获取Application:是之前已经创建好的Application
+  Context appContext = createBaseContextForActivity(r, activity); //创建上下文ContextImpl
+  activity.attach(appContext, ...); //attach 应用的上下文
+  mInstrumentation.callActivityOnCreate(activity, r.state); //Activity的生命周期回调,onCreate()
+  activity.performStart(); //Activity.onStart()
+  return activity;
+}
+```
+![image](https://github.com/SilenceWeak/Framework/blob/main/Pic/HandleOnResume.jpg)
+
+* 应用端Activity启动的流程
+![image](https://github.com/SilenceWeak/Framework/blob/main/Pic/应用端Activity启动的流程.jpg)
+
+* Activity的启动流程
+![image](https://github.com/SilenceWeak/Framework/blob/main/Pic/Activity的启动流程.jpg)
 
 
