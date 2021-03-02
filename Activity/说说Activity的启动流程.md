@@ -100,6 +100,12 @@ public final void scheduleLaunchActivity (Intent intent, IBinder token, ) {
   ActivityClientRecord r = new ActivityClientRecord(); //封装一个消息丢到主线程
   sendMessage(H.L AUNCH ACTIVITY, r); // ---->   mH.sendMessage(msg);
 }
+
+//主线程处理逻辑
+final ActivityClientRecord r = (ActivityClientRecord) msg.obj; 
+r.packagelnfo = getPackagelnfoNoCheck...);
+handleLaunchActivity(r, null);
 ```
+
 
 
