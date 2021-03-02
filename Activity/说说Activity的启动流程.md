@@ -71,4 +71,35 @@
   ```
 * 创建Activity的流程
 ![image](https://github.com/SilenceWeak/Framework/blob/main/Pic/ProcessOfCreateActivity.jpg)
+```
+boolean attachApplicationLocked (lApplicationThread thread, int pid) {
+  ProcessRecord app = mPidsSelfLocked.get(pid);
+  thread.bindApplication(...); //thread是应用端注册到AMS的binder对象，类型是ApplicationThread，binderApplication是做一些初始化的工作
+  
+  mStackSupervisor.attachApplicationLocked(app); //启动挂起的组件，由于应用进程被创建所以需要将其启动
+  ...
+  mServices.attachApplicationLocked(app, processName);
+  ...
+  sendPendingBroadcastsLocked(app);
+}
+
+boolean attachApplicationLocked(ProcessRecord app) { //启动Activity的组件
+  ...
+  //stack:mFocusedStack；AMS中有两种Stack，LaunchStack：与桌面相关的stack。还有与桌面不相关的mFocusedStack
+  //去stack中找到最近的task去占领activity，即，应用还未启动的时候这些数据结构都准备好了，
+  //只要应用程序一启动，那么立马就会把准备好的东西塞进去
+  ActivityRecord hr = stack.topRunningActivityLocked(null);
+  realStartActivityLockedhr, app, true, true);
+  ...
+}
+```
+![image](https://github.com/SilenceWeak/Framework/blob/main/Pic/RealStartActivityLocked.jpg)
+```
+@Override 
+public final void scheduleLaunchActivity (Intent intent, IBinder token, ) {
+  ActivityClientRecord r = new ActivityClientRecord(); //封装一个消息丢到主线程
+  sendMessage(H.L AUNCH ACTIVITY, r); // ---->   mH.sendMessage(msg);
+}
+```
+
 
