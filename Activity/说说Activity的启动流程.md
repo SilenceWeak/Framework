@@ -131,4 +131,6 @@ private Activity performLaunchActivity (ActivityClientRecord r, ...) {
 * Activity的启动流程
 ![image](https://github.com/SilenceWeak/Framework/blob/main/Pic/Activity的启动流程.jpg)
 
-
+###  启动Activity要向AMS发起binder调用
+###  Activity所在的进程是怎么被启动的
+###  进程端Activity是怎么初始化的，Activity的生命周期是怎么回调的
