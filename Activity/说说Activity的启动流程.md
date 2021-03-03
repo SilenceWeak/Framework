@@ -139,4 +139,5 @@ private Activity performLaunchActivity (ActivityClientRecord r, ...) {
 ###  进程端Activity是怎么初始化的，Activity的生命周期是怎么回调的
    * 在上面说到的启动组件中，有一个方法会启动Activity。
    * 该方法会发送一个消息至主线程，主线程接收到消息之后，便开始启动Activity
-   * 首先LaunchActivity，先创建一个新Activity，同时attach application 和
+   * 首先LaunchActivity，先创建一个新Activity，同时attach application 和 context等，同时在此处还会callActivityOnCreate等，也就是回调其onCreate，onStart等生命周期方法
+   * 接着会performResume（）
