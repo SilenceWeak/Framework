@@ -133,9 +133,10 @@ private Activity performLaunchActivity (ActivityClientRecord r, ...) {
 
 ###  启动Activity要向AMS发起binder调用
 ###  Activity所在的进程是怎么被启动的：
-      * 先向AMS发起请求，如果进程是存在的那么直接调用realStartActivityLocked方法，如果不是则调起zygote，同时10s后如果没有收到进程向AMS报告，那么就把它清除掉
-      * 在zygote中，fork出一个新的应用进程，同时调用AMS中传过来的参数，启动应用进程的入口函数
-      * 在进程的入口函数中，调用attach方法，向AMS进行报告，报告完毕后，AMS会拿到进程的binder对象，在attachApplication中对其作初始化处理，同时启动被挂起的各种组件
+   * 先向AMS发起请求，如果进程是存在的那么直接调用realStartActivityLocked方法，如果不是则调起zygote，同时10s后如果没有收到进程向AMS报告，那么就把它清除掉
+   * 在zygote中，fork出一个新的应用进程，同时调用AMS中传过来的参数，启动应用进程的入口函数
+   * 在进程的入口函数中，调用attach方法，向AMS进行报告，报告完毕后，AMS会拿到进程的binder对象，在attachApplication中对其作初始化处理，同时启动被挂起的各种组件
 ###  进程端Activity是怎么初始化的，Activity的生命周期是怎么回调的
-      * 在上面说到的启动组件中，会启动Activity。
-      * 
+   * 在上面说到的启动组件中，有一个方法会启动Activity。
+   * 该方法会发送一个消息至主线程，主线程接收到消息之后，便开始启动Activity
+   * 首先LaunchActivity，先创建一个新Activity，同时attach application 和
