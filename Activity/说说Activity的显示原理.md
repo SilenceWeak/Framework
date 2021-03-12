@@ -1,7 +1,7 @@
 # Activity的显示原理
 ### PhoneWindow是什么，什么时候创建的
 ### setContentView的原理是什么
-  ```
+    ```
     setContentView(){
        getWindow().setContentView();
     }
@@ -19,12 +19,12 @@
      
      mLayoutInflater.inflate(LayoutResID,mContentParent); //在此处给ViewPartent填充布局View
     }
-  ```
+    ```
   **上述工作只是建立了ViewTree的数据结构，要展示出来还有很多的工作**
   * Activity在onresume之后才会显示出来的原因是什么
 ### DecorView是什么
  **在View被onCreate创建好数据结构之后，在onResume回调中将其真正展示出来**
-    ```
+     ```
      handleResumeActivity(){
        ... = performResumeActivity(token)；      //调用onResume回调方法
        
@@ -32,7 +32,7 @@
        
        r.acticity.makeVisible()                 //最后设置Activity可见,不过这里只是一些重绘而已，真正的管理还是WindowManager来管理的绘制流程
      }
-    ```
+     ```
 **在windowManager的addView中，使用ViewRootImpl.setView()方法来管理刚才设置的View**
     ```
      (ViewRootImpl)root.setView(view,wparams,panelParentView);
