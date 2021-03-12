@@ -64,6 +64,9 @@
       * 掌管surface显示顺序及位置尺寸等
       * 控制窗C动画
       * 输入事件分发
+      ```
+      addToDisplay() -> mService.addWindow(...);
+      ```
     
   
   * ViewRoot是干什么的，是View Tree的rootView吗
