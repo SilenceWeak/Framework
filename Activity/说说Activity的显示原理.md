@@ -1,5 +1,12 @@
 # Activity的显示原理
 ### PhoneWindow是什么，什么时候创建的
+phoneWindow是整个手机的Window，它管理整个手机的Window，除了应用的Window还包括很多系统本身的Window，它是在Activity初始化的attach函数中被创建的
+### setContentView的原理是什么，DecorView又是什么？
+原理是里面有个installDecor方法，该方法会拿到DecorView，也即一个FrameLayout，手机的RootView，在其中加载系统布局后找到其中的部件mContentParent，再向mContentParent中设置布局，建立一套ViewTree数据结构。
+### ViewRoot是什么，有什么作用？
+ViewRoot是View的数据结构的根，也即DecorView，它创建了ViewRootImpl，与WMS通信进行绘制页面
+### View的显示原理是什么，WMS发挥了什么作用？
+显示原理是，在ViewRootimpl的setView方法中与WMS通信，注册Window，同时进行onMeasure等绘制流程，在WMS注册后会拿到surface，应用进行绘制后，SurfaceFlinger根据WMS的管理合成View输送到缓冲区
 * **setContentView的原理是什么**
 ```
     setContentView(){
@@ -82,6 +89,3 @@
 ![image](https://github.com/SilenceWeak/Framework/blob/main/Pic/Activity%E6%98%BE%E7%A4%BA%E5%8E%9F%E7%90%86.jpg)
 * 其中Activity会在attach方法中创建一个phonewindow，phonewindow再创建DecorView，DecorView中的一部分就是ContentView，而DecorView做的最重要的一件事就是初始化了一个ViewRootImpl对象，该对象会和WMS进行Binder双向调用，而在WMS中，会注册一个Window，通过WMS全权进行管理该窗口。
 * 第一次绘制时，还会注册一个surface，拿到surface之后应用就可以进行绘制，之后surfaceFlinger会根据WMS提供的window大小位置等信息来合成View输入到缓冲区进行显示
-
-### ViewRoot是什么，有什么作用？
-### View的显示原理是什么，WMS发挥了什么作用？
