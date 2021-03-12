@@ -4,7 +4,7 @@ phoneWindow是整个手机的Window，它管理整个手机的Window，除了应
 ### setContentView的原理是什么，DecorView又是什么？
 原理是里面有个installDecor方法，该方法会拿到DecorView，也即一个FrameLayout，手机的RootView，在其中加载系统布局后找到其中的部件mContentParent，再向mContentParent中设置布局，建立一套ViewTree数据结构。
 ### ViewRoot是什么，有什么作用？
-ViewRoot是View的数据结构的根，也即DecorView，它创建了ViewRootImpl，与WMS通信进行绘制页面
+ViewRoot也即ViewRootImpl，与WMS通信进行绘制页面
 ### View的显示原理是什么，WMS发挥了什么作用？
 显示原理是，在ViewRootimpl的setView方法中与WMS通信，注册Window，同时进行onMeasure等绘制流程，在WMS注册后会拿到surface，应用进行绘制后，SurfaceFlinger根据WMS的管理合成View输送到缓冲区
 * **setContentView的原理是什么**
