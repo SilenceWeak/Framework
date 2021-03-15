@@ -50,6 +50,7 @@
 
 所以对于Activity来说，UI线程就是主线程。
 
+### UI线程和UI体系之间的关系，如ViewRootImpl的原理:
 **View.post(runable)**
 ```
 public boolean post(Runnable action){
