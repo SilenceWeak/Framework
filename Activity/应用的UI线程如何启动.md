@@ -117,8 +117,6 @@ void checkThread(){
 
 ActivityThread.handleResumeActivity => WindowManagerImpl.addView => WindowManagerGlobal.addView => ViewRootImpl的创建
 
- 
-
 handleResumeActivity是在应用进程的主线程调的，
 
 所以
@@ -134,10 +132,6 @@ DecorView是整个界面最顶层的View，
 DecorView有一个ViewRootImpl，负责DecorView的绘制流程，事件分发，以及与WMS通信，
 
 **VIewRootImpl是在主线程创建的，所以对于Activity的DecorView来说，UI线程就是主线程**
-
- 
-
- 
 
 UI线程就是主线程，这个结论之所以成立，
 
@@ -198,3 +192,13 @@ public static void main(String[] args){
     Looper.loop();
 }
 ```
+
+总结，应用的UI线程如何启动
+
+1，UI线程是什么，解释为什么UI线程是主线程
+
+2，既然UI线程是主线程，它是和AP进程一起启动的，可以顺便说AP进程的启动流程，
+
+还要说UI线程的消息循环是怎么创建的
+
+3，UI线程和UI体系之间的关系，如ViewRootImpl的原理:
