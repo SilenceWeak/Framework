@@ -63,7 +63,7 @@ public boolean post(Runnable action){
     return true;
 }
 ```
-**对于代码的解释**
+**对于代码的解释**  
 情况1，
 
 何时设置AttachInfo？
@@ -86,8 +86,115 @@ AttachInfo为什么会是NUll
 
 再丢到VIewRootImpl所在线程处理，
 
- 
-
 所以不管哪种情况，最后都要丢到ViewRootImpl的线程处理。
 
-### 
+**再看一个问题，一个异常，是子线程刷新UI时抛出的**
+
+只有create view hierarchy的那个riginal thread才可以touch这个view，
+
+也是在暗示并不是只有主线程才可以touch view
+
+它是怎么判断我们的线程是不是最初创建view hierarchy的线程？
+
+看看信息，View.requstLayout会调到ViewRootImpl的checkThread，所以每次requestLayout都会检查线程，不对就抛出异常
+
+**看看checkThread实现：**
+```
+void checkThread(){
+    //mThread就是创建View hierarchy的thread，什么时候init的？在ViewRootImpl的构造函数init的，
+    //所以可以确定UI线程就是ViewRootImpl所在的线程。
+    //注意不是View布局加载所在线程，而是ViewRootImpl创建所在线程
+    if(mThread != Thread.currentThread()){
+        throw new CalledFromWrongThreadException(
+            "Only the orignal thrad that catred a view can touch its views"
+        )
+    }
+}
+```
+所以ViewRootImpl创建是在哪个线程？
+
+调用流程：
+
+ActivityThread.handleResumeActivity => WindowManagerImpl.addView => WindowManagerGlobal.addView => ViewRootImpl的创建
+
+ 
+
+handleResumeActivity是在应用进程的主线程调的，
+
+所以
+
+***Activity的DecorView对应的ViewRootImpl是在主线程创建的***
+
+**结论：**
+
+一个Activity，里面有一个PhoneWIndow，PhoneWindow厘米有一个DecorView，
+
+DecorView是整个界面最顶层的View，
+
+DecorView有一个ViewRootImpl，负责DecorView的绘制流程，事件分发，以及与WMS通信，
+
+**VIewRootImpl是在主线程创建的，所以对于Activity的DecorView来说，UI线程就是主线程**
+
+ 
+
+ 
+
+UI线程就是主线程，这个结论之所以成立，
+
+是因为DecorView的ViewRootImpl恰好在主线程创建而已，如果不再主线程创建会怎么样？那就不在主线程刷新UI了吗？
+
+看看Activity是怎么触发ViewRootImpl创建的，以handleResumeActivity为入口分析一下：
+
+```
+final void handleResumeActivity(IBinder token,...){
+    ...
+    final Activity a = r.activity;
+    //得到Activity的WindowManager
+    ViewManager wm = a.getWindowManager();
+    //把Actvitiy的decorView add到WindowManager
+    wm.addView(decor, l);
+    ....
+}
+ 
+//addView里做了什么：
+//new一个ViewRootImpl对象
+root = new ViewRootImpl(view.getContext(), display);
+//通过serView把View交给ViewRootImpl管理，这步非常重要。
+root.setView(view, wparams, panelParentView);
+```
+
+模仿一下，做一个实验
+```
+new Thread(){
+    @Override
+    public void run(){
+        Looper.prepare();
+        ...
+        //view是通过LayoutInflater加载出来的，通过addView把View加入WindowManager，
+        //设置下View的textView，发现成功了，点击View的一个按钮，onCreate函数是跑 在子线程的，
+        //如果在主线程去刷新UI，反而会抛出那个异常:WrongThread
+        getWindowManager().addView(view, params);
+        
+        Looper.loop();
+    }
+}.start();
+```
+### UI线程的启动
+对应用来说，UI线程默认就是主线程，
+
+那么UI线程的启动，就是主线程的启动，这个大家都熟悉，AP启动时主线程就有了，
+
+AP启动流程：
+
+zygote fork进程 =》 启动Binder线程 =》 执行入口函数
+
+入口函数就是ActivityThread.main()
+```
+public static void main(String[] args){
+    //创建Looper，looper我们都熟悉，平时创建子线程的looper都要调用Looper.prepare()
+    //这个prepareMainLooper我们没用过，因为我们不能调。
+    Looper.prepareMainLooper();
+    ...
+    Looper.loop();
+}
+```
