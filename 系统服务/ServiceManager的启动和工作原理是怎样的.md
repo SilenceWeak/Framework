@@ -57,4 +57,32 @@ int svcmgr handler(... struct binder transaction data *txn, .. {
 ```
 可以看到ServiceManager根据发送请求的请求码做出了添加服务的操作
 
-## 怎么获
+## 怎么获取服务
+```
+public static lBinder getService(String name) {
+  IBinder service = sCache.get(name);
+  if (service != null) {
+    return service;
+  } else if{
+    return getlServiceManager().getService(name);
+  }
+  return null;
+}
+```
+发起一个binder调用，发送获取服务的请求
+
+而ServiceManger接受到请求之后，根据**对应的请求码**做出响应操作
+```
+int svcmgr handler(... struct binder transaction_ data *txn, .... ){
+  uint32 t handle;
+  switch(txn->code) {
+    ... 
+    case SVC MGR GET SERVICE:
+      s = bio_ get string16(msg, &len);
+      handle = do_ find_ service(bs, S, len, ..);)
+      bio_ put_ ref(reply, handle);
+      return O;
+    ...
+  }
+}
+```
