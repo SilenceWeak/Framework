@@ -47,7 +47,7 @@ addService(): 先发送请求，参数是自己的名字和binder对象，而Ser
 int svcmgr handler(... struct binder transaction data *txn, .. {
   switch(txn-> code) {
     ...
-    case SVC MGR ADD SERVICE:
+    case SVC_MGR_ADD_SERVICE:
       ...
       do_add_service(bs, s, len, handle, ..);
     break;
@@ -77,10 +77,10 @@ int svcmgr handler(... struct binder transaction_ data *txn, .... ){
   uint32 t handle;
   switch(txn->code) {
     ... 
-    case SVC MGR GET SERVICE:
-      s = bio_ get string16(msg, &len);
-      handle = do_ find_ service(bs, S, len, ..);)
-      bio_ put_ ref(reply, handle);
+    case SVC_MGR_GET_SERVICE:
+      s = bio_get_string16(msg, &len);
+      handle = do_find_service(bs, S, len, ..);)
+      bio_put_ref(reply, handle);
       return O;
     ...
   }
