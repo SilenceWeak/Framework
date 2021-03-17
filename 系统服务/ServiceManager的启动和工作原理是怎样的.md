@@ -41,4 +41,20 @@ int main(int, char**) {
 **在defaultServiceManger（)中，如果已经拿到了binder对象，就直接返回，如果没有，那么就循环尝试，直到拿到为止，之所以需要这样是因为surfaceFlinger和ServiceManager都是通过init.rc拉起的**
 
 ## 怎么添加Service？
-addService(): 先发送
+addService(): 先发送请求，参数是自己的名字和binder对象，而ServiceManager接收到了之后会开始进行处理
+
+```
+int svcmgr handler(... struct binder transaction data *txn, .. {
+  switch(txn-> code) {
+    ...
+    case SVC MGR ADD SERVICE:
+      ...
+      do_add_service(bs, s, len, handle, ..);
+    break;
+  }
+  ...
+}
+```
+可以看到ServiceManager根据发送请求的请求码做出了添加服务的操作
+
+## 怎么获
