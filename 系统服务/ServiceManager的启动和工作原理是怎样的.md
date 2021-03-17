@@ -38,4 +38,7 @@ int main(int, char**) {
 }
 ```
 所以重点在于defaultServiceManger()  
-**在defaultServiceManger（)中，如果已经拿到了binder对象，就直接返回，如果没有，那么就循环尝试，直到拿到为止，之所以**
+**在defaultServiceManger（)中，如果已经拿到了binder对象，就直接返回，如果没有，那么就循环尝试，直到拿到为止，之所以需要这样是因为surfaceFlinger和ServiceManager都是通过init.rc拉起的**
+
+## 怎么添加Service？
+addService(): 先发送
