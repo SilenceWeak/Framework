@@ -10,9 +10,22 @@
   
 * 其中scheduleCreateService()是AMS端向应用端发起调用，执行Service的启动流程，以及onCreate()等回调方法
 * sendServiceArgsLocked是用来启动ServiceStartCommon()的方法，该方法会真正的启动Service的工作  
+  这里sendServiceArgsLocked的流程大概是：
+  1. 调用应用端的scheduleServiceArgs
+  2. 应用端发送消息丢到主线程中去处理:  
+  ![image](https://user-images.githubusercontent.com/32014204/113107581-adff2180-9236-11eb-9c09-2761d522b5df.png)
+  👆是主线程里做出的对应处理
+  
   
   
 ## 二、在应用端接收到AMS的Create消息时，应用端会开始Create Service
 ![image](https://user-images.githubusercontent.com/32014204/113105324-0c76d080-9234-11eb-8c16-4f372c0ff8e9.png)
 
-* 其中，启动流程和Activity类似，会创建其Context，makeApplication，同时通过attach绑定上下文（还会向AMS报告），再调用Service的onCreate()回调
+* 其中，启动流程和Activity类似，会创建其Context，makeApplication，同时通过attach绑定上下文（还会向AMS报告），再调用Service的onCreate()回调  
+  
+  
+## 三、Service的大致启动流程图
+![image](https://user-images.githubusercontent.com/32014204/113107844-f74f7100-9236-11eb-841d-7eabeb64836e.png)
+
+## 四、换一个角度来看Service的启动
+![image](https://user-images.githubusercontent.com/32014204/113108674-d3405f80-9237-11eb-89e7-87522b38ab0c.png)
