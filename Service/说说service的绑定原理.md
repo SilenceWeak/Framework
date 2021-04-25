@@ -12,4 +12,35 @@
 ## bindService的处理
 ![image](https://user-images.githubusercontent.com/32014204/115987616-63c85080-a5e8-11eb-9cb6-9330cb2c399f.png)
 
-### * 其中会先调用getServiceDispatcher来将serviceConnection注册
+### * 其中会先调用getServiceDispatcher来进行各种操作
+
+![image](https://user-images.githubusercontent.com/32014204/115987915-bb1af080-a5e9-11eb-8c00-c1699ffd70f0.png)  
+  
+  
+通过InnerConnection向主线程post了一个runConnection, 随后来到主线程中进行处理
+
+```
+//在主线程中的处理
+public void doConnected(ComponentName name, lBinder service) {
+  old = mActiveConnections.get(name);
+  if (old != null && old.binder == service) {
+      return; //防止重复调用onServiceConnected方法
+  }
+  if (service != null) {
+      info = new Connectionlnfo(service);
+      mActiveConnections.put(name, info);
+  } else {
+      mActiveConnections.remove(name);
+  }
+  if (old != null) {
+      mConnection.onServiceDisconnected(name);
+  }
+  if (service != null) {
+      mConnection.onServiceConnected(name, service);
+  }
+}
+```
+
+![image](https://user-images.githubusercontent.com/32014204/115988200-1ac5cb80-a5eb-11eb-9fda-2ca4659ca658.png)
+
+
