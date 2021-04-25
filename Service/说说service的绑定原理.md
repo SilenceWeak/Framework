@@ -50,5 +50,8 @@ public void doConnected(ComponentName name, lBinder service) {
 ![image](https://user-images.githubusercontent.com/32014204/115988281-74c69100-a5eb-11eb-98ad-0fa24a0dbdcb.png)
 两者不是一对一的关系
 
+### AMS端的处理
+![image](https://user-images.githubusercontent.com/32014204/115988442-56ad6080-a5ec-11eb-9fd9-627d9ae1becd.png)
+
 
 
