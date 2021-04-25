@@ -42,5 +42,13 @@ public void doConnected(ComponentName name, lBinder service) {
 ```
 
 ![image](https://user-images.githubusercontent.com/32014204/115988200-1ac5cb80-a5eb-11eb-9fda-2ca4659ca658.png)
+一般都不会回调到onServiceDisconnected这个方法, 一般是当这个Service被干掉的时候, 才会回调到
+
+### 整体流程
+![image](https://user-images.githubusercontent.com/32014204/115988257-5496d200-a5eb-11eb-966a-7ac0a17c0de3.png)
+
+![image](https://user-images.githubusercontent.com/32014204/115988281-74c69100-a5eb-11eb-98ad-0fa24a0dbdcb.png)
+两者不是一对一的关系
+
 
 
