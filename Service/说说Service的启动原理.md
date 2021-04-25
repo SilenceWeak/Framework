@@ -22,7 +22,6 @@
 ![image](https://user-images.githubusercontent.com/32014204/113105324-0c76d080-9234-11eb-8c16-4f372c0ff8e9.png)
 
 * 其中，启动流程和Activity类似，会创建其Context，makeApplication，同时通过attach绑定上下文（还会向AMS报告），再调用Service的onCreate()回调  
-* 而sendServiceArgsLocked, 则会直接取出一个servicerecord, 发送消息到应用主线程进行处理
   
   
 #### 三、Service的大致启动流程图
