@@ -48,10 +48,14 @@ public void doConnected(ComponentName name, lBinder service) {
 ![image](https://user-images.githubusercontent.com/32014204/115988257-5496d200-a5eb-11eb-966a-7ac0a17c0de3.png)
 
 ![image](https://user-images.githubusercontent.com/32014204/115988281-74c69100-a5eb-11eb-98ad-0fa24a0dbdcb.png)
-IServiceConnection两者不是一对一的关系
+IServiceConnection 和 ServiceConnection两者不是一对一的关系
 
 ### AMS端的处理
 ![image](https://user-images.githubusercontent.com/32014204/115988442-56ad6080-a5ec-11eb-9fd9-627d9ae1becd.png)
+
+### 搞清楚几个数据结构
+![image](https://user-images.githubusercontent.com/32014204/116178084-8755dd00-a747-11eb-9ffd-80af67ecb1a9.png)
+#### 在这其中, 从上到下都是 **上** 包含一或多 **下** 的关系
 
 
 
