@@ -56,7 +56,7 @@ IServiceConnection 和 ServiceConnection两者不是一对一的关系
 ### 搞清楚几个数据结构
 | ServiceRecord | IntentBindRecord | AppBindRecord | ConnectionRecord |
 | :-----------: | :--------------: | :-----------: | :--------------: |
-| 应用端一个Service会在AMS对应一个ServiceRecord | 
+| 应用端一个Service会在AMS对应一个ServiceRecord | Service可以对应多个不同的Intent | Intent可以来自多个不同的应用进程 |一个进程中可能对应多个不同的连接|
 #### 在这其中, 从上到下都是 **上** 包含一或多 **下** 的关系
 
 
