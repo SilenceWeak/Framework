@@ -54,7 +54,9 @@ IServiceConnection 和 ServiceConnection两者不是一对一的关系
 ![image](https://user-images.githubusercontent.com/32014204/115988442-56ad6080-a5ec-11eb-9fd9-627d9ae1becd.png)
 
 ### 搞清楚几个数据结构
-
+| ServiceRecord | IntentBindRecord | AppBindRecord | ConnectionRecord |
+| :-----------: | :--------------: | :-----------: | :--------------: |
+| 应用端一个Service会在AMS对应一个ServiceRecord | 
 #### 在这其中, 从上到下都是 **上** 包含一或多 **下** 的关系
 
 
