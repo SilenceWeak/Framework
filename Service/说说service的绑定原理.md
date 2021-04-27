@@ -59,5 +59,19 @@ IServiceConnection 和 ServiceConnection两者不是一对一的关系
 | 应用端一个Service会在AMS对应一个ServiceRecord | Service可以对应多个不同的Intent | Intent可以来自多个不同的应用进程 |一个进程中可能对应多个不同的连接|
 #### 在这其中, 从上到下都是 **上** 包含一或多 **下** 的关系
 
+### AMS处理bind
+![image](https://user-images.githubusercontent.com/32014204/116179499-0f3ce680-a74a-11eb-9212-eb6753ee2280.png)
+![image](https://user-images.githubusercontent.com/32014204/116179525-1b28a880-a74a-11eb-9113-2f59ff0163ba.png)
+
+#### * 第一个方法是回调应用端的创建Service, 并回调onCreate
+#### * 第二个方法请求Service发布自己的binder句柄‘
+#### * 第三个方法查看有无pendingStarts需要处理
+
+![image](https://user-images.githubusercontent.com/32014204/116179978-c3d70800-a74a-11eb-8ca3-737633789655.png)
+### 
+
+
+
+
 
 
