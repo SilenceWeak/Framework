@@ -68,7 +68,13 @@ IServiceConnection 和 ServiceConnection两者不是一对一的关系
 #### * 第三个方法查看有无pendingStarts需要处理
 
 ![image](https://user-images.githubusercontent.com/32014204/116179978-c3d70800-a74a-11eb-8ca3-737633789655.png)
-### 
+### 调用到应用端的handlebind
+![image](https://user-images.githubusercontent.com/32014204/116180109-f84ac400-a74a-11eb-834c-0ff2731cbc55.png)
+
+### 总结
+* binderService大致工作流程
+* service绑定相关的生命周期回调原理
+ 
 
 
 
